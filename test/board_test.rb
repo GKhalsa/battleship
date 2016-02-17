@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../lib/board.rb'
+require_relative '../lib/ship.rb'
 
 class BoardTest < Minitest::Test
 
@@ -16,19 +17,16 @@ class BoardTest < Minitest::Test
   end
 
   def test_draw_grid
-    skip
     board = Board.new
-    assert_equal '', board.draw_grid
+    layout = {:A=>[" ", " ", " ", " "], :B=>[" ", " ", " ", " "], :C=>[" ", " ", " ", " "], :D=>[" ", " ", " ", " "]}
+    assert_equal layout, board.draw_grid
   end
 
   def test_board_can_add_a_ship
-    skip
     board = Board.new
-    ship = Ship.new
+    ship = Ship.new("uBoat", 2)
     board.add_ship(ship)
     board.what_ships?
-    board.ship_locations
     board.validate_ship
-    board.sunk_ship?
   end
 end

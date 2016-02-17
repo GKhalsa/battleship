@@ -7,8 +7,17 @@ class Board
 
   def draw_grid
     grid.each do |key, spaces|
-      key + spaces
+      spaces.join(" ")
     end
+  end
+
+  def add_ship(ship)
+  end
+
+  def what_ships?
+  end
+
+  def validate_ship
   end
 
 end
