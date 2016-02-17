@@ -10,6 +10,7 @@ class Repl
   def game_loop
     loop do
       output = @battleship.processor_of_inputs(gets.chomp)
+      # binding.pry
       break if output == 'q'
     end
     #return nil

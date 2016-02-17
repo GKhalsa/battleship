@@ -12,13 +12,13 @@ class BoardTest < Minitest::Test
 
   def test_board_has_a_layout
     board = Board.new
-    layout = {A:[" "," "," "," "], B:[" "," "," "," "], C:[" "," "," "," "], D:[" "," "," "," "] }
+    layout = { A:[" "," "," "," "], B:[" "," "," "," "], C:[" "," "," "," "], D:[" "," "," "," "] }
     assert_equal layout, board.grid
   end
 
   def test_draw_grid
     board = Board.new
-    layout = {:A=>[" ", " ", " ", " "], :B=>[" ", " ", " ", " "], :C=>[" ", " ", " ", " "], :D=>[" ", " ", " ", " "]}
+    layout = { A:[" ", " ", " ", " "], B:[" ", " ", " ", " "], C:[" ", " ", " ", " "], D:[" ", " ", " ", " "] }
     assert_equal layout, board.draw_grid
   end
 
