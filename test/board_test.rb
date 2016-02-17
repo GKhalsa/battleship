@@ -3,17 +3,26 @@ require 'minitest/pride'
 require_relative '../lib/board.rb'
 
 class BoardTest < Minitest::Test
-  def board_has_a_class
+
+  def test_board_has_a_class
     board = Board.new
     assert_equal Board, board.class
   end
 
-  def board_has_a_layout
+  def test_board_has_a_layout
     board = Board.new
-    assert_equal , board.spaces
+    layout = {A:[" "," "," "," "], B:[" "," "," "," "], C:[" "," "," "," "], D:[" "," "," "," "] }
+    assert_equal layout, board.grid
   end
 
-  def board_can_add_a_ship
+  def test_draw_grid
+    skip
+    board = Board.new
+    assert_equal '', board.draw_grid
+  end
+
+  def test_board_can_add_a_ship
+    skip
     board = Board.new
     ship = Ship.new
     board.add_ship(ship)
