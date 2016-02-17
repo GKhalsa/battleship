@@ -1,8 +1,8 @@
 class Board
   attr_reader :grid
   def initialize
-    @grid = {A:[" "," "," "," "], B:[" "," "," "," "], C:[" "," "," "," "], D:[" "," "," "," "] }
-    @ship_locations = [["A1", "A2"], ["B2", "B3"]] #maybe objects
+    @grid = {A:["A"," "," "," "," "], B:["B"," "," "," "," "], C:["C"," "," "," "," "], D:["D"," "," "," "," "] }
+    @ship_locations = [] #[['a1','a2'],['b2','b3','b4']] #ship objects
   end
 
   def draw_grid
@@ -15,7 +15,12 @@ class Board
   end
 
   def add_ship(input)
-    @ship_locations << #["b2", "b3"]] #input
+    # if can_ship_be_created?(input)
+    @ship_locations #<<
+    #if can_ship_be_created
+    #input.create_ship
+    #input = ship object
+    #ship139483 @occupied_spaces = {'A1' => nil, 'A2' => nil}
   end
 
   def what_ships?
@@ -31,19 +36,21 @@ class Board
   def populate_grid
   end
 
-  def is_a_hit?
+  def is_a_hit?(input)
     @ship_locations.flatten.include?("B4")
+    #ship1.ship_locations.each do |location, status|
+      #if location == input
+         #ship1[location] = true
+        #@grid[:B][4] = "H"
+      #end
+  end
 
-    #if it is included, search ships for "B4" and change ["B4",nil]
-    #to ["B4",true]
-    # ship1 = {'A1' => nil, 'A2' => nil}
-    # ship2 = {'B1' => nil, 'B2' => nil}
-    #change @grid[:B][4 - 1] = H   #to_sym
-    #else @grid[:B][4 - 1] = M
-    #ship_1.map! do |space, peg|
-    #  [space, peg = true] if guess == space
-    #end
-    #ship validator, scans ships for all true
+  def ship_validation
+
+    #scan ship objects and see if a ship has all falses
+    #if so say ship_object.name is sunk
+    #change ship.sunk to true
+  end
 
   end
 
