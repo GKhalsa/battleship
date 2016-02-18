@@ -17,7 +17,6 @@ class GameplayTest < Minitest::Test
     assert_equal 0, gameplay.players_board
   end
 
-  meta single:true
   def test_player_can_shoot_and_hit_a_ship
     gameplay = Gameplay.new
 
@@ -30,6 +29,7 @@ class GameplayTest < Minitest::Test
     refute gameplay.player_fire_missile('c1')
   end
 
+  meta single:true
   def test_if_player_hits_all_locations_boat_is_sunk
     gameplay = Gameplay.new
 

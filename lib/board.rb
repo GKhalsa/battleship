@@ -11,21 +11,21 @@ class Board
   def setup_ai_board
     ship_1 = Ship.new("uBoat", "a1 a2")
     ship_2 = Ship.new("Destroyer","b1 b3")
-    @ship_locations << ship_1
-    @ship_locations << ship_2
+    ship_locations << ship_1
+    ship_locations << ship_2
   end
 
   def setup_human_board_with_first_ship(input)
     if can_ship_be_created?(input)
       ship_1 = Ship.new("uBoat", input)
-      @ship_locations << ship_1
+      ship_locations << ship_1
     end
   end
 
   def setup_human_board_with_second_ship(input)
     if can_ship_be_created?(input)
       ship_2 = Ship.new("Destroyer", input)
-      @ship_locations << ship_2
+      ship_locations << ship_2
     end
   end
 
@@ -38,23 +38,14 @@ class Board
     #puts =========
   end
 
-  # def add_ship(input)
-  #   # if can_ship_be_created?(input)
-  #   @ship_locations #<<
-  #   #if can_ship_be_created
-  #   #input.create_ship
-  #   #input = ship object
-  #   #ship139483 @occupied_spaces = {'A1' => nil, 'A2' => nil}
-  # end
-
   def what_ships?
-    @ship_locations
+    ship_locations
   end
 
   def can_ship_be_created?(input)
     board = [*('a'..'d'), *('1'..'4')]
     board_check = input.delete(' ').chars.all? {|location| board.include?(location)}
-      if @ship_locations.empty?
+      if ship_locations.empty?
         ship_check = true
       else
         ship_check = can_ship_be_created_extension(input)
@@ -63,7 +54,7 @@ class Board
   end
 
   def can_ship_be_created_extension(input)
-    overlap = @ship_locations.map {|ship| ship.occupied_spaces.keys & input.split}
+    overlap = ship_locations.map {|ship| ship.occupied_spaces.keys & input.split}
     if overlap.flatten.empty?
       true
     else
@@ -74,13 +65,14 @@ class Board
   def populate_grid
   end
 
-  def is_a_hit?(input)
-    @ship_locations.flatten.include?("B4")
-    #ship1.ship_locations.each do |location, status|
-      #if location == input
-         #ship1[location] = true
-        #@grid[:B][4] = "H"
-      #end
+  def is_a_hit?(missile_guess)
+    ship_locations.any? do |ship|
+      ship_coordinates = ship.occupied_spaces.keys
+      if ship_coordinates.include?(missile_guess)
+        hit_location = ship_coordinates & missile_guess.split
+        ship.occupied_spaces[hit_location.join] = true
+      end
+    end
   end
 
   def ship_validation

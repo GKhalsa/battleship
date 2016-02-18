@@ -12,17 +12,11 @@ class Gameplay
   end
 
   def player_fire_missile(missile_guess)
-    ai_board.ship_locations.any? do |ship|
-      ship_coordinates = ship.occupied_spaces.keys
-      if ship_coordinates.include?(missile_guess)
-        hit_location = ship_coordinates & missile_guess.split
-        ship.occupied_spaces[hit_location.join] = true
-      end
-    end
+    ai_board.is_a_hit?(missile_guess)
   end
 
   def ship_check
-    @ai_board
+    ai_board.ship_validation
   end
 
 
