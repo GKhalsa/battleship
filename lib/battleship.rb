@@ -1,7 +1,8 @@
 require_relative 'responses.rb'
+require_relative 'gameplay.rb'
 
 class Battleship
-  def initialize   
+  def initialize
   end
 
   def initialize
@@ -15,7 +16,7 @@ class Battleship
     when 'q'
       'q'
     when 'p'
-      #
+      Gameplay.new
     end
   end
 
