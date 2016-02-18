@@ -19,6 +19,8 @@ class Board
     if can_ship_be_created?(input)
       ship_1 = Ship.new("uBoat", input)
       ship_locations << ship_1
+      user_ship_locations_grid(input)
+
     end
   end
 
@@ -26,16 +28,18 @@ class Board
     if can_ship_be_created?(input)
       ship_2 = Ship.new("Destroyer", input)
       ship_locations << ship_2
+      user_ship_locations_grid(input)
     end
   end
 
   def draw_grid
-    #puts =========
+    puts "========="
+    puts ". 1 2 3 4"
     grid.each do |key, spaces|
-      spaces.join(" ")
+      puts spaces.join(" ")
       #if I put a letter in the array, then the spaces would be 1-4 and not 0-3
     end
-    #puts =========
+    puts "========="
   end
 
   def what_ships?
@@ -63,7 +67,22 @@ class Board
     end
   end
 
-  def populate_grid
+  def update_grid_if_ship_is_hit(missile_guess)
+    #runs if ship is hit
+    #changes board
+    binding.pry
+    symbol = missile_guess.chars[0].to_sym.upcase
+    position = missile_guess.chars[1].to_i
+    grid[symbol][position] = 'X'
+  end
+
+  def user_ship_locations_grid(input)
+    input.split.each do |coordinates|
+      sym = coordinates.chars[0].upcase.to_sym
+      index = coordinates.chars[1].to_i
+      grid[sym][index] = '*'
+    end
+    binding.pry
   end
 
   def is_a_hit?(missile_guess)
@@ -73,6 +92,7 @@ class Board
         hit_location = ship_coordinates & missile_guess.split
         ship.occupied_spaces[hit_location.join] = true
         ship_validation
+        #update_grid(missile_guess)
         #say hit here instead of true and run ship_validation
       end
     end

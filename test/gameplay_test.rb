@@ -29,7 +29,15 @@ class GameplayTest < Minitest::Test
     refute gameplay.player_fire_missile('c1')
   end
 
-  meta single:true
+  def test_ai_can_shoot_player
+  end
+
+  def test_when_player_hits_it_changes_board
+    gameplay = Gameplay.new
+    gameplay.player_fire_missile('a1')
+
+    assert_equal '', gameplay.draw_board('a1')
+  end
   def test_if_player_hits_all_locations_boat_is_sunk
     gameplay = Gameplay.new
 
@@ -37,5 +45,16 @@ class GameplayTest < Minitest::Test
     gameplay.player_fire_missile('a2')
 
     assert_equal "uBoat is down!", gameplay.boat_response
+  end
+
+
+  def test_if_player_downs_both_ships
+    gameplay = Gameplay.new
+    gameplay.player_fire_missile('a1')
+    gameplay.player_fire_missile('a2')
+    gameplay.player_fire_missile('a1')
+    gameplay.player_fire_missile('a2')
+
+    # assert gameplay.end_game
   end
 end
