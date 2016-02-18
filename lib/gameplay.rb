@@ -19,5 +19,10 @@ class Gameplay
     ai_board.ship_validation
   end
 
+  def boat_response
+    ai_board.ship_response
+    #if boat is sunk and notified user is false then tell user then switch notified user to true
+  end
+
 
 end

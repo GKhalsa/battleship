@@ -33,9 +33,9 @@ class GameplayTest < Minitest::Test
   def test_if_player_hits_all_locations_boat_is_sunk
     gameplay = Gameplay.new
 
-    player_fire_missile('a1')
-    player_fire_missile('a2')
+    gameplay.player_fire_missile('a1')
+    gameplay.player_fire_missile('a2')
 
-    assert_equal "uBoat is down!", gameplay.ship_check
+    assert_equal "uBoat is down!", gameplay.boat_response
   end
 end

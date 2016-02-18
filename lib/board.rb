@@ -52,6 +52,7 @@ class Board
       end
     board_check && ship_check
   end
+  #^^ make ship_check default true, then change if the else is true
 
   def can_ship_be_created_extension(input)
     overlap = ship_locations.map {|ship| ship.occupied_spaces.keys & input.split}
@@ -71,15 +72,29 @@ class Board
       if ship_coordinates.include?(missile_guess)
         hit_location = ship_coordinates & missile_guess.split
         ship.occupied_spaces[hit_location.join] = true
+        ship_validation
+        #say hit here instead of true and run ship_validation
       end
     end
   end
 
   def ship_validation
+    ship_locations.each do |ship|
+      if ship.occupied_spaces.values.all?
+        ship.sunk = true
+      end
+    end
+  end
 
-    #scan ship objects and see if a ship has all falses
-    #if so say ship_object.name is sunk
-    #change ship.sunk to true
+  def ship_response
+    response = []
+    ship_locations.each do |ship|
+      if ship.sunk && ship.notified_user == false
+        response << "#{ship.name} is down!"
+        ship.notified_user = true
+      end
+    end
+    response
   end
 
   def show_hit_on_grid
