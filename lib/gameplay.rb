@@ -54,11 +54,11 @@ class Gameplay
       ship_selecting
     elsif player_ship_input.empty?
       @player_ship_input << input.split
-      player_board.setup_human_board_with_ship(input)
+      player_board.setup_human_board_with_ship(input, "uBoat")
       Responses.second_ship
       player_enter_ship(gets.chomp.downcase)
     elsif !player_ship_input.empty?
-      player_board.setup_human_board_with_ship(input)
+      player_board.setup_human_board_with_ship(input, "Destroyer")
     end
   end
 
