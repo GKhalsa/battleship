@@ -13,8 +13,10 @@ class Board
   end
 
   def setup_ai_board
-    ship_1 = Ship.new("uBoat", 'a1 b1') #ai_positions.two_spot_generation.downcase
-    ship_2 = Ship.new("Destroyer", 'c1 c2 c3') #ai_positions.three_spot_generation.downcase
+    location = []
+    location << ai_positions.valid_positions
+    ship_1 = Ship.new("uBoat", location[0][0..1].join(' ').downcase)
+    ship_2 = Ship.new("Destroyer", location[0][2..-1].join(' ').downcase)
     ship_locations << ship_1
     ship_locations << ship_2
   end
