@@ -13,8 +13,8 @@ class Board
   end
 
   def setup_ai_board
-    ship_1 = Ship.new("uBoat", ai_positions.two_spot_generation.downcase)
-    ship_2 = Ship.new("Destroyer", ai_positions.three_spot_generation.downcase)
+    ship_1 = Ship.new("uBoat", 'a1 b1') #ai_positions.two_spot_generation.downcase
+    ship_2 = Ship.new("Destroyer", 'c1 c2 c3') #ai_positions.three_spot_generation.downcase
     ship_locations << ship_1
     ship_locations << ship_2
   end
@@ -75,14 +75,11 @@ class Board
         hit_location = ship_coordinates & missile_guess.split
         ship.occupied_spaces[hit_location.join] = true
         ship_validation
-        update_grid_if_ship_is_hit(missile_guess)
         notify_user = user_missile_response
         hits << missile_guess
-      else
-        update_grid_if_ship_not_hit(missile_guess)
       end
+      update_grid_if_ship_not_hit(missile_guess)
       hits.each {|hit| update_grid_if_ship_is_hit(hit)}
-      hits = []
     end
     notify_user
   end

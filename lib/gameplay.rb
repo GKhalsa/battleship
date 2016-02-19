@@ -125,8 +125,9 @@ class Gameplay
     temp_ai_missile << ['a','b','c','d'].sample
     temp_ai_missile << ['1','2','3','4'].sample
     if !ai_missile.include?(temp_ai_missile)
-      ai_missile << temp_ai_missile
+      ai_missile << temp_ai_missile[-2..-1]
     else
+      ai_fire = []
       ai_fire
     end
     puts player_board.is_a_hit?(ai_missile[-1])
