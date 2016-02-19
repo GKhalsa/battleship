@@ -154,6 +154,10 @@ class Gameplay
     ai_array << ship.occupied_spaces.values.count(true)}
     player_board.ship_locations.each {|ship|
     player_array << ship.occupied_spaces.values.count(true)}
+    game_check_adjust(player_array, ai_array)
+  end
+
+  def game_check_adjust(player_array, ai_array)
     if player_array.reduce(:+) == 5
       @finale = true
       @ai_win = true
