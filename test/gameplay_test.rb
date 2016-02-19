@@ -55,6 +55,5 @@ class GameplayTest < Minitest::Test
     gameplay.player_fire_missile('a1')
     gameplay.player_fire_missile('a2')
 
-    # assert gameplay.end_game
   end
 end
