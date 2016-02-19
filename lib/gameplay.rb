@@ -56,12 +56,18 @@ class Gameplay
       if input.delete(' ').chars.uniq.count > 3
         puts "You trickster, I'm onto you, try again"
         ship_selecting
+      elsif input.delete(' ').chars.count > 4
+        puts "hey dude, this is for the small ship"
+        ship_selecting
       else
         enter_ship(input)
       end
     elsif !player_ship_input.empty?
       if input.delete(' ').chars.uniq.count > 4
         puts "huh, think you could get away with that? try again"
+        ship_selecting
+      elsif input.delete(' ').chars.count < 5
+        puts "you're gonna need more than that for a Destroyer"
         ship_selecting
       else
         player_board.setup_human_board_with_ship(input, "Destroyer")
