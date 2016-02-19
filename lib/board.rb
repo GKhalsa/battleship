@@ -15,12 +15,19 @@ class Board
     ship_locations << ship_2
   end
 
+  def setup_human_board_with_ship(input)
+    if input.length < 6
+      setup_human_board_with_first_ship(input)
+    else
+      setup_human_board_with_second_ship(input)
+    end
+  end
+
   def setup_human_board_with_first_ship(input)
     if can_ship_be_created?(input)
       ship_1 = Ship.new("uBoat", input)
       ship_locations << ship_1
       user_ship_locations_grid(input)
-
     end
   end
 
@@ -70,7 +77,6 @@ class Board
   def update_grid_if_ship_is_hit(missile_guess)
     #runs if ship is hit
     #changes board
-    binding.pry
     symbol = missile_guess.chars[0].to_sym.upcase
     position = missile_guess.chars[1].to_i
     grid[symbol][position] = 'X'
@@ -82,7 +88,6 @@ class Board
       index = coordinates.chars[1].to_i
       grid[sym][index] = '*'
     end
-    binding.pry
   end
 
   def is_a_hit?(missile_guess)
