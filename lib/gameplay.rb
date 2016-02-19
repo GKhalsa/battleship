@@ -16,7 +16,7 @@ class Gameplay
     @human_win              = false
     @rounds                 = 0
     @endgame                = Endgame.new
-    # game_engine
+    game_engine
   end
 
   def game_engine
