@@ -53,13 +53,27 @@ class Gameplay
       puts 'you already included that space!'
       ship_selecting
     elsif player_ship_input.empty?
-      @player_ship_input << input.split
-      player_board.setup_human_board_with_ship(input, "uBoat")
-      Responses.second_ship
-      player_enter_ship(gets.chomp.downcase)
+      if input.delete(' ').chars.uniq.count > 3
+        puts "You trickster, I'm onto you, try again"
+        ship_selecting
+      else
+        enter_ship(input)
+      end
     elsif !player_ship_input.empty?
-      player_board.setup_human_board_with_ship(input, "Destroyer")
+      if input.delete(' ').chars.uniq.count > 4
+        puts "huh, think you could get away with that? try again"
+        ship_selecting
+      else
+        player_board.setup_human_board_with_ship(input, "Destroyer")
+      end
     end
+  end
+
+  def enter_ship(input)
+    @player_ship_input << input.split
+    player_board.setup_human_board_with_ship(input, "uBoat")
+    Responses.second_ship
+    player_enter_ship(gets.chomp.downcase)
   end
 
   def firing_engine
@@ -85,7 +99,7 @@ class Gameplay
   end
 
   def prompt_player
-    puts "press enter to continue"
+    puts "press ENTER to continue"
     enter = gets.chomp
   end
 

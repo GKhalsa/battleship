@@ -13,10 +13,9 @@ class Board
   end
 
   def setup_ai_board
-    location = []
-    location << ai_positions.valid_positions
-    ship_1 = Ship.new("uBoat", location[0][0..1].join(' ').downcase)
-    ship_2 = Ship.new("Destroyer", location[0][2..-1].join(' ').downcase)
+    location = ai_positions.valid_positions
+    ship_1 = Ship.new("uBoat", location[0..1].join(' ').downcase)
+    ship_2 = Ship.new("Destroyer", location[2..-1].join(' ').downcase)
     ship_locations << ship_1
     ship_locations << ship_2
   end
