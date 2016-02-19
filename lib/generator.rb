@@ -24,7 +24,6 @@ class Generator
 
     position_one << second_location
     position_one.flatten
-    binding.pry
   end
 
 end

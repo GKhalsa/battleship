@@ -3,7 +3,7 @@ require_relative 'responses.rb'
 require_relative 'endgame.rb'
 
 class Gameplay
-  attr_reader :rounds, :ai_board, :player_board, :player_ship_input, :player_missile_guesses, :ai_missile, :endgame, :human_win, :rounds
+  attr_reader :rounds, :ai_board, :player_board, :player_ship_input, :player_missile_guesses, :ai_missile, :endgame, :human_win, :rounds, :ai_win
 
   def initialize
     @ai_board               = Board.new(:ai)
@@ -16,7 +16,7 @@ class Gameplay
     @human_win              = false
     @rounds                 = 0
     @endgame                = Endgame.new
-    game_engine
+    # game_engine
   end
 
   def game_engine

@@ -50,4 +50,14 @@ class GameplayTest < Minitest::Test
     assert gameplay.ai_missile
   end
 
+  def test_for_endgame
+    gameplay = Gameplay.new
+
+    gameplay.game_check_adjust([4],[0])
+    assert_equal false, gameplay.ai_win
+
+    gameplay.game_check_adjust([5],[0])
+    assert_equal true, gameplay.ai_win
+  end
+
 end

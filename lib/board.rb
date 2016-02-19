@@ -53,12 +53,6 @@ class Board
     overlap.flatten.empty? ? true : false
   end
 
-  def update_grid_if_ship_is_hit(missile_guess)
-    symbol = missile_guess.chars[0].to_sym
-    position = missile_guess.chars[1].to_i
-    grid[symbol][position] = 'H'
-  end
-
   def user_ship_locations_grid(input)
     input.split.each do |coordinates|
       sym = coordinates.chars[0].to_sym
@@ -66,6 +60,13 @@ class Board
       grid[sym][index] = '*'
     end
   end
+
+  def update_grid_if_ship_is_hit(missile_guess)
+    symbol = missile_guess.chars[0].to_sym
+    position = missile_guess.chars[1].to_i
+    grid[symbol][position] = 'H'
+  end
+
 
   def is_a_hit?(missile_guess)
     hits = []
