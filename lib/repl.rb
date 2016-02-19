@@ -10,7 +10,10 @@ class Repl
   def game_loop
     loop do
       output = @battleship.processor_of_inputs(gets.chomp)
-      break if output == 'q'
+      if output == 'q'
+        puts "see you later aligator!"
+        break
+      end
     end
   end
 

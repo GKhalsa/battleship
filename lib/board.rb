@@ -10,7 +10,7 @@ class Board
 
   def setup_ai_board
     ship_1 = Ship.new("uBoat", "a1 a2")
-    ship_2 = Ship.new("Destroyer","b1 b3")
+    ship_2 = Ship.new("Destroyer", "b1 b2 b3")
     ship_locations << ship_1
     ship_locations << ship_2
   end
@@ -75,11 +75,9 @@ class Board
   end
 
   def update_grid_if_ship_is_hit(missile_guess)
-    #runs if ship is hit
-    #changes board
     symbol = missile_guess.chars[0].to_sym.upcase
     position = missile_guess.chars[1].to_i
-    grid[symbol][position] = 'X'
+    grid[symbol][position] = 'H'
   end
 
   def user_ship_locations_grid(input)
@@ -91,16 +89,29 @@ class Board
   end
 
   def is_a_hit?(missile_guess)
-    ship_locations.any? do |ship|
+    hits = []
+    notify_user = "No hit, I repeat no hit!"
+    ship_locations.each do |ship|
       ship_coordinates = ship.occupied_spaces.keys
       if ship_coordinates.include?(missile_guess)
         hit_location = ship_coordinates & missile_guess.split
         ship.occupied_spaces[hit_location.join] = true
         ship_validation
-        #update_grid(missile_guess)
-        #say hit here instead of true and run ship_validation
+        update_grid_if_ship_is_hit(missile_guess)
+        notify_user = user_missile_response
+        hits << missile_guess
+      else
+        update_grid_if_ship_not_hit(missile_guess)
       end
+      hits.each {|hit| update_grid_if_ship_is_hit(hit)}
     end
+    notify_user
+  end
+
+  def update_grid_if_ship_not_hit(missile_guess)
+    symbol = missile_guess.chars[0].to_sym.upcase
+    position = missile_guess.chars[1].to_i
+    grid[symbol][position] = 'M'
   end
 
   def ship_validation
@@ -111,8 +122,14 @@ class Board
     end
   end
 
+  def user_missile_response
+    response = "It's a hit! "
+    response << ship_response
+  end
+
+
   def ship_response
-    response = []
+    response = ""
     ship_locations.each do |ship|
       if ship.sunk && ship.notified_user == false
         response << "#{ship.name} is down!"

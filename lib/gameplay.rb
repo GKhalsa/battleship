@@ -2,17 +2,21 @@ require_relative 'board.rb'
 require_relative 'responses.rb'
 
 class Gameplay
-  attr_accessor :ai_board, :player_board, :player_ship_input
+  attr_accessor :ai_board, :player_board, :player_ship_input, :player_missile_guesses, :ai_missile
   def initialize
     @ai_board ||= Board.new(:ai)
     @player_board = Board.new(:human)
     @player_ship_input = []
+    @player_missile_guesses = []
+    @ai_missile = []
+    @endgame = false
     game_engine
   end
 
   def game_engine
     start_game_with_ai_message
     ship_selecting
+    Responses.finished_up_ship_placement
     firing_engine
   end
 
@@ -46,15 +50,25 @@ class Gameplay
       @player_ship_input << input.split
       player_board.setup_human_board_with_ship(input)
       Responses.second_ship
-      player_enter_ship(gets.chomp)
+      player_enter_ship(gets.chomp.downcase)
     elsif !player_ship_input.empty?
       player_board.setup_human_board_with_ship(input)
-      Responses.finished_up_ship_placement
     end
   end
 
   def firing_engine
-    #draw grid
+    until @endgame == true
+      ai_board.draw_grid
+      puts 'take a shot!'
+      player_fire_missile
+      ai_board.draw_grid
+      prompt_player
+      puts '==========================================='
+      puts "the computer retaliates!"
+      ai_fire
+      player_board.draw_grid
+      puts '==========================================='
+    end
   end
 
   def players_board
@@ -62,8 +76,55 @@ class Gameplay
     player_board.ship_locations.count
   end
 
-  def player_fire_missile(missile_guess)
-    ai_board.is_a_hit?(missile_guess)
+  def prompt_player
+    puts "press enter to continue"
+    enter = gets.chomp
+  end
+
+  def player_fire_missile
+    validate_player_shot(gets.chomp.downcase)
+  end
+
+  def validate_player_shot(missile_guess)
+    invalid_chars = [*('e'..'z'), '0',*('5'..'9')]
+    nums = [*('1'..'4')]
+    if missile_guess.include?(' ')
+      puts 'no spaces!'
+      player_fire_missile
+    elsif missile_guess[0] == "q"
+      puts "see you later alligator!"
+      abort
+    elsif invalid_chars.any? {|char| missile_guess.include?(char)}
+      puts 'not a valid character matey!'
+      player_fire_missile
+    elsif player_missile_guesses.include?(missile_guess)
+      puts 'you already shot there!'
+      player_fire_missile
+    elsif missile_guess.delete(' ').length != 2
+      puts "you didn't enter the right amount of characters!"
+      player_fire_missile
+    elsif !nums.any? {|char| missile_guess.include?(char)}
+      puts "you need to enter a number!"
+      player_fire_missile
+    else
+      puts ai_board.is_a_hit?(missile_guess)
+    end
+  end
+
+  def ai_random_missile
+
+  end
+
+  def ai_fire
+    temp_ai_missile = ""
+    temp_ai_missile << ['a','b','c','d'].sample
+    temp_ai_missile << ['1','2','3','4'].sample
+    if !ai_missile.include?(temp_ai_missile)
+      ai_missile << temp_ai_missile
+    else
+      ai_fire
+    end
+    puts player_board.is_a_hit?(ai_missile[-1])
   end
 
   def ship_check
