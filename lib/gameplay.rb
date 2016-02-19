@@ -161,10 +161,6 @@ class Gameplay
     end
   end
 
-  def ai_random_missile
-
-  end
-
   def ai_fire
     temp_ai_missile = ""
     temp_ai_missile << ['a','b','c','d'].sample
@@ -176,22 +172,5 @@ class Gameplay
     end
     puts player_board.is_a_hit?(ai_missile[-1])
   end
-
-  def ship_check
-    ai_board.ship_validation
-  end
-
-  def boat_response
-    ai_board.ship_response
-    #if both ships are all true, activate end game
-  end
-
-  def draw_board(missile_guess)
-    ai_board.update_grid(missile_guess)
-  end
-
-  def end_game
-  end
-
 
 end

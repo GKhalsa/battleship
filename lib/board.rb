@@ -1,4 +1,5 @@
 require_relative 'ship.rb'
+require_relative 'string.rb'
 class Board
   attr_reader :grid, :ship_locations
 
@@ -44,7 +45,6 @@ class Board
     puts ". 1 2 3 4"
     grid.each do |key, spaces|
       puts spaces.join(" ")
-      #if I put a letter in the array, then the spaces would be 1-4 and not 0-3
     end
     puts "========="
   end
@@ -63,14 +63,13 @@ class Board
       end
     board_check && ship_check
   end
-  #^^ make ship_check default true, then change if the else is true
 
   def can_ship_be_created_extension(input)
     overlap = ship_locations.map {|ship| ship.occupied_spaces.keys & input.split}
     if overlap.flatten.empty?
       true
     else
-      false  #send overlap to user
+      false
     end
   end
 
@@ -90,7 +89,7 @@ class Board
 
   def is_a_hit?(missile_guess)
     hits = []
-    notify_user = "No hit, I repeat no hit!"
+    notify_user = "No hit, I repeat no hit!".blue
     ship_locations.each do |ship|
       ship_coordinates = ship.occupied_spaces.keys
       if ship_coordinates.include?(missile_guess)
@@ -123,7 +122,7 @@ class Board
   end
 
   def user_missile_response
-    response = "It's a hit! "
+    response = "It's a hit! ".red
     response << ship_response
   end
 
