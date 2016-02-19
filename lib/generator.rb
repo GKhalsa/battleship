@@ -17,4 +17,15 @@ class Generator
     "A3 B3 C3", "B3 C3 D3", "A4 B4 C4", "B4 C4 D4"].sample
   end
 
+  def valid_positions
+    position_one = [] << two_spot_generation
+    position_two = [] << three_spot_generation
+    if position_one & position_two == []
+      position_one << position_two
+    else
+      valid_positions
+    end
+    position_one.flatten
+  end
+
 end

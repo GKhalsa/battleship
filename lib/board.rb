@@ -2,19 +2,18 @@ require_relative 'ship.rb'
 require_relative 'string.rb'
 require_relative 'generator.rb'
 class Board
-  attr_reader :grid, :ship_locations
+  attr_reader :grid, :ship_locations, :ai_positions
 
   def initialize(board_type = nil)
     @grid = {a:["A"," "," "," "," "], b:["B"," "," "," "," "], c:["C"," "," "," "," "], d:["D"," "," "," "," "] }
-    @ship_location_generator = Generator.new
+    @ai_positions = Generator.new
     @ship_locations = []
     setup_ai_board if board_type == :ai
   end
 
   def setup_ai_board
-    #ship_1 = Ship.new("uBoat", generator)
-    ship_1 = Ship.new("uBoat", "a1 a2")
-    ship_2 = Ship.new("Destroyer", "b1 b2 b3")
+    ship_1 = Ship.new("uBoat", ai_positions.valid_positions[0].downcase)
+    ship_2 = Ship.new("Destroyer", ai_positions.valid_positions[1].downcase)
     ship_locations << ship_1
     ship_locations << ship_2
   end
@@ -97,7 +96,7 @@ class Board
   end
 
   def update_grid_if_ship_not_hit(missile_guess)
-    symbol = missile_guess.chars[0].to_sym.upcase
+    symbol = missile_guess.chars[0].to_sym
     position = missile_guess.chars[1].to_i
     grid[symbol][position] = 'M'
   end
