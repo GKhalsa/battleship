@@ -2,15 +2,35 @@ require_relative 'board.rb'
 require_relative 'responses.rb'
 
 class Gameplay
-  attr_accessor :ai_board, :player_board, :player_ship_input, :player_missile_guesses, :ai_missile
+  attr_reader :rounds, :ai_board, :player_board, :player_ship_input, :player_missile_guesses, :ai_missile
+
   def initialize
-    @ai_board ||= Board.new(:ai)
+    @ai_board = Board.new(:ai)
     @player_board = Board.new(:human)
     @player_ship_input = []
     @player_missile_guesses = []
     @ai_missile = []
     @endgame = false
+    @ai_win = false
+    @human_win = false
+    @rounds = 0
     game_engine
+  end
+
+  def game_check
+    player_array = []
+    ai_array = []
+    ai_board.ship_locations.each {|ship|
+    ai_array << ship.occupied_spaces.values.count(true)}
+    player_board.ship_locations.each {|ship|
+    player_array << ship.occupied_spaces.values.count(true)}
+    if player_array.reduce(:+) == 5
+      @endgame = true
+      @ai_win = true
+    elsif ai_array.reduce(:+) == 5
+      @endgame = true
+      @human_win = true
+    end
   end
 
   def game_engine
@@ -57,17 +77,46 @@ class Gameplay
   end
 
   def firing_engine
-    until @endgame == true
+    @x = Time.now
+    loop do
       ai_board.draw_grid
       puts 'take a shot!'
       player_fire_missile
+      game_check
+      break if @endgame == true
       ai_board.draw_grid
       prompt_player
       puts '==========================================='
       puts "the computer retaliates!"
       ai_fire
+      game_check
+      break if @endgame == true
       player_board.draw_grid
       puts '==========================================='
+    end
+    @y = Time.now
+    endgame
+  end
+
+  def endgame
+    time = (@y - @x).to_i.divmod 60
+    if @human_win
+      puts "Congratulations! You beat the hunt for the Red October in #{rounds} rounds! This took #{time[0]} minutes and #{time[1]} seconds"
+    else
+      puts "Sorry, computer wins! You played #{rounds} rounds which took #{time[0]} minutes and #{time[1]} seconds"
+    end
+    puts "would you like to (p)lay again or (q)uit?"
+    replay(gets.chomp.delete(' ').downcase)
+  end
+
+  def replay(input)
+    if input[0] == 'p'
+      game_engine
+    elsif input[0] == 'q'
+      'thanks for playing!'
+      abort
+    else
+      puts "that's not a valid response"
     end
   end
 
@@ -107,6 +156,7 @@ class Gameplay
       puts "you need to enter a number!"
       player_fire_missile
     else
+      @rounds += 1
       puts ai_board.is_a_hit?(missile_guess)
     end
   end

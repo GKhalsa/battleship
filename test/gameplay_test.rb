@@ -16,11 +16,11 @@ class GameplayTest < Minitest::Test
 
     assert_equal 0, gameplay.players_board
   end
-
+    meta single:true
   def test_player_can_shoot_and_hit_a_ship
     gameplay = Gameplay.new
 
-    assert gameplay.player_fire_missile('a1')
+    assert gameplay.player_fire_missile('b2')
   end
 
   def test_player_can_shoot_and_not_hit

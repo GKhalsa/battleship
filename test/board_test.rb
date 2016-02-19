@@ -28,7 +28,6 @@ class BoardTest < Minitest::Test
     assert_equal 2, board.ship_locations.count
   end
 
-  meta single:true
   def test_can_human_build_a_board?
     board = Board.new
     board.setup_human_board_with_first_ship('a1 a2')
