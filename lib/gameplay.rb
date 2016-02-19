@@ -1,36 +1,22 @@
 require_relative 'board.rb'
 require_relative 'responses.rb'
+require_relative 'endgame.rb'
 
 class Gameplay
-  attr_reader :rounds, :ai_board, :player_board, :player_ship_input, :player_missile_guesses, :ai_missile
+  attr_reader :rounds, :ai_board, :player_board, :player_ship_input, :player_missile_guesses, :ai_missile, :endgame, :human_win, :rounds
 
   def initialize
-    @ai_board = Board.new(:ai)
-    @player_board = Board.new(:human)
-    @player_ship_input = []
+    @ai_board               = Board.new(:ai)
+    @player_board           = Board.new(:human)
+    @player_ship_input      = []
     @player_missile_guesses = []
-    @ai_missile = []
-    @endgame = false
-    @ai_win = false
-    @human_win = false
-    @rounds = 0
+    @ai_missile             = []
+    @finale                 = false
+    @ai_win                 = false
+    @human_win              = false
+    @rounds                 = 0
+    @endgame                = Endgame.new
     game_engine
-  end
-
-  def game_check
-    player_array = []
-    ai_array = []
-    ai_board.ship_locations.each {|ship|
-    ai_array << ship.occupied_spaces.values.count(true)}
-    player_board.ship_locations.each {|ship|
-    player_array << ship.occupied_spaces.values.count(true)}
-    if player_array.reduce(:+) == 5
-      @endgame = true
-      @ai_win = true
-    elsif ai_array.reduce(:+) == 5
-      @endgame = true
-      @human_win = true
-    end
   end
 
   def game_engine
@@ -77,52 +63,25 @@ class Gameplay
   end
 
   def firing_engine
-    @x = Time.now
+    start = Time.now
     loop do
       ai_board.draw_grid
       puts 'take a shot!'
       player_fire_missile
       game_check
-      break if @endgame == true
+      break if @finale == true
       ai_board.draw_grid
       prompt_player
       puts '==========================================='
       puts "the computer retaliates!"
       ai_fire
       game_check
-      break if @endgame == true
+      break if @finale == true
       player_board.draw_grid
       puts '==========================================='
     end
-    @y = Time.now
-    endgame
-  end
-
-  def endgame
-    time = (@y - @x).to_i.divmod 60
-    if @human_win
-      puts "Congratulations! You beat the hunt for the Red October in #{rounds} rounds! This took #{time[0]} minutes and #{time[1]} seconds"
-    else
-      puts "Sorry, computer wins! You played #{rounds} rounds which took #{time[0]} minutes and #{time[1]} seconds"
-    end
-    puts "would you like to (p)lay again or (q)uit?"
-    replay(gets.chomp.delete(' ').downcase)
-  end
-
-  def replay(input)
-    if input[0] == 'p'
-      game_engine
-    elsif input[0] == 'q'
-      'thanks for playing!'
-      abort
-    else
-      puts "that's not a valid response"
-    end
-  end
-
-  def players_board
-    player_board = Board.new(:human)
-    player_board.ship_locations.count
+    finish = Time.now
+    endgame.final_message(start, finish, human_win, rounds)
   end
 
   def prompt_player
@@ -171,6 +130,22 @@ class Gameplay
       ai_fire
     end
     puts player_board.is_a_hit?(ai_missile[-1])
+  end
+
+  def game_check
+    player_array = []
+    ai_array = []
+    ai_board.ship_locations.each {|ship|
+    ai_array << ship.occupied_spaces.values.count(true)}
+    player_board.ship_locations.each {|ship|
+    player_array << ship.occupied_spaces.values.count(true)}
+    if player_array.reduce(:+) == 5
+      @finale = true
+      @ai_win = true
+    elsif ai_array.reduce(:+) == 5
+      @finale = true
+      @human_win = true
+    end
   end
 
 end

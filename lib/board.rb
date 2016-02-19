@@ -1,15 +1,18 @@
 require_relative 'ship.rb'
 require_relative 'string.rb'
+require_relative 'generator.rb'
 class Board
   attr_reader :grid, :ship_locations
 
   def initialize(board_type = nil)
-    @grid = {A:["A"," "," "," "," "], B:["B"," "," "," "," "], C:["C"," "," "," "," "], D:["D"," "," "," "," "] }
+    @grid = {a:["A"," "," "," "," "], b:["B"," "," "," "," "], c:["C"," "," "," "," "], d:["D"," "," "," "," "] }
+    @ship_location_generator = Generator.new
     @ship_locations = []
     setup_ai_board if board_type == :ai
   end
 
   def setup_ai_board
+    #ship_1 = Ship.new("uBoat", generator)
     ship_1 = Ship.new("uBoat", "a1 a2")
     ship_2 = Ship.new("Destroyer", "b1 b2 b3")
     ship_locations << ship_1
@@ -17,11 +20,7 @@ class Board
   end
 
   def setup_human_board_with_ship(input)
-    if input.length < 6
-      setup_human_board_with_first_ship(input)
-    else
-      setup_human_board_with_second_ship(input)
-    end
+    input.length < 6 ? setup_human_board_with_first_ship(input) : setup_human_board_with_second_ship(input)
   end
 
   def setup_human_board_with_first_ship(input)
@@ -49,10 +48,6 @@ class Board
     puts "========="
   end
 
-  def what_ships?
-    ship_locations
-  end
-
   def can_ship_be_created?(input)
     board = [*('a'..'d'), *('1'..'4')]
     board_check = input.delete(' ').chars.all? {|location| board.include?(location)}
@@ -66,22 +61,18 @@ class Board
 
   def can_ship_be_created_extension(input)
     overlap = ship_locations.map {|ship| ship.occupied_spaces.keys & input.split}
-    if overlap.flatten.empty?
-      true
-    else
-      false
-    end
+    overlap.flatten.empty? ? true : false
   end
 
   def update_grid_if_ship_is_hit(missile_guess)
-    symbol = missile_guess.chars[0].to_sym.upcase
+    symbol = missile_guess.chars[0].to_sym
     position = missile_guess.chars[1].to_i
     grid[symbol][position] = 'H'
   end
 
   def user_ship_locations_grid(input)
     input.split.each do |coordinates|
-      sym = coordinates.chars[0].upcase.to_sym
+      sym = coordinates.chars[0].to_sym
       index = coordinates.chars[1].to_i
       grid[sym][index] = '*'
     end
@@ -95,8 +86,6 @@ class Board
       if ship_coordinates.include?(missile_guess)
         hit_location = ship_coordinates & missile_guess.split
         ship.occupied_spaces[hit_location.join] = true
-        ship_validation
-        update_grid_if_ship_is_hit(missile_guess)
         notify_user = user_missile_response
         hits << missile_guess
       else
@@ -113,19 +102,10 @@ class Board
     grid[symbol][position] = 'M'
   end
 
-  def ship_validation
-    ship_locations.each do |ship|
-      if ship.occupied_spaces.values.all?
-        ship.sunk = true
-      end
-    end
-  end
-
   def user_missile_response
     response = "It's a hit! ".red
     response << ship_response
   end
-
 
   def ship_response
     response = ""
@@ -136,9 +116,6 @@ class Board
       end
     end
     response
-  end
-
-  def show_hit_on_grid
   end
 
 end

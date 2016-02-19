@@ -4,10 +4,10 @@ class Ship
   attr_accessor :occupied_spaces, :sunk, :notified_user
 
   def initialize(name, positions)
-    @name = name
-    @sunk = false
+    @name            = name
+    @sunk            = false
     @occupied_spaces = {}
-    @notified_user = false
+    @notified_user   = false
     create_ship(positions)
   end
 

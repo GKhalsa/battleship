@@ -2,8 +2,6 @@ require_relative 'responses.rb'
 require_relative 'gameplay.rb'
 
 class Battleship
-  def initialize
-  end
 
   def initialize
     Responses.initial_game_message
